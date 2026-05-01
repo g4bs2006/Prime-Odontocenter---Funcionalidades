@@ -1,3 +1,5 @@
+import 'server-only'
+
 const CLINICORP_BASE = 'https://api.clinicorp.com/rest/v1'
 const HELENA_BASE = 'https://api.wts.chat'
 
@@ -24,6 +26,7 @@ export async function fetchClinicorp<T = unknown>(path: string, init?: RequestIn
   return res.json() as Promise<T>
 }
 
+// No cache revalidation: Helena session data is real-time by design.
 export async function fetchHelena<T = unknown>(
   path: string,
   init?: RequestInit

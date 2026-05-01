@@ -1,3 +1,4 @@
+import 'server-only'
 import type { ClinicCredentials, ClinicSlug } from '@/lib/types'
 
 const CLINIC_CREDENTIALS: Record<ClinicSlug, () => ClinicCredentials> = {
@@ -10,10 +11,14 @@ const CLINIC_CREDENTIALS: Record<ClinicSlug, () => ClinicCredentials> = {
 }
 
 export function getClinicCredentials(accountId: string): ClinicCredentials {
-  const map: Record<string, ClinicSlug> = JSON.parse(process.env.ACCOUNT_MAP ?? '{}')
-  const slug = map[accountId]
-  if (!slug || !(slug in CLINIC_CREDENTIALS)) {
-    throw new Error(`Unknown accountId: ${accountId}`)
+  let map: Record<string, ClinicSlug> = {}
+  try {
+    map = JSON.parse(process.env.ACCOUNT_MAP ?? '{}')
+  } catch {
+    throw new Error('ACCOUNT_MAP env var is not valid JSON')
   }
+  const slug = map[accountId]
+  if (!slug) throw new Error(`No clinic mapping for accountId: ${accountId}`)
+  if (!(slug in CLINIC_CREDENTIALS)) throw new Error(`Clinic slug "${slug}" is not configured`)
   return CLINIC_CREDENTIALS[slug]()
 }

@@ -56,4 +56,10 @@ describe('fetchHelena', () => {
       })
     )
   })
+
+  it('lança erro quando response.ok é false', async () => {
+    mockFetch.mockResolvedValueOnce({ ok: false, status: 401, text: async () => 'Unauthorized' })
+    const { fetchHelena } = await import('@/lib/api')
+    await expect(fetchHelena('/chat/v2/session')).rejects.toThrow('Helena 401')
+  })
 })

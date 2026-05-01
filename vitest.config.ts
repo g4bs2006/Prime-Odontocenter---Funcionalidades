@@ -12,6 +12,9 @@ export default defineConfig({
     passWithNoTests: true,
   },
   resolve: {
-    alias: { '@': path.resolve(__dirname, '.') },
+    alias: {
+      '@': path.resolve(__dirname, '.'),
+      'server-only': path.resolve(__dirname, '__mocks__/server-only.ts'),
+    },
   },
 })

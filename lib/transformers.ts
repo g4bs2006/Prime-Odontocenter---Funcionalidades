@@ -5,7 +5,7 @@ export function daysAgo(dateStr: string): number {
 }
 
 export function estimateDaysStale(isoString: string): number {
-  return differenceInDays(startOfDay(new Date()), startOfDay(parseISO(isoString)))
+  return daysAgo(isoString)
 }
 
 export function formatBRL(value: number): string {

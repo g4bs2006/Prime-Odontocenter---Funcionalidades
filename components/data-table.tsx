@@ -15,7 +15,7 @@ interface DataTableProps<T> {
   emptyMessage?: string
 }
 
-export function DataTable<T extends Record<string, unknown>>({
+export function DataTable<T>({
   columns, rows, emptyMessage = 'Nenhum dado encontrado.',
 }: DataTableProps<T>) {
   return (
@@ -40,7 +40,7 @@ export function DataTable<T extends Record<string, unknown>>({
               <TableRow key={i}>
                 {columns.map((col) => (
                   <TableCell key={String(col.key)}>
-                    {col.render ? col.render(row) : String(row[col.key as keyof T] ?? '—')}
+                    {col.render ? col.render(row) : String((row as any)[col.key] ?? '—')}
                   </TableCell>
                 ))}
               </TableRow>
