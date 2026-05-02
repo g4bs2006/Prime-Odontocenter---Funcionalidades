@@ -6,11 +6,13 @@ import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/empty-state'
 import { KpiCard } from '@/components/kpi-card'
 
+export const dynamic = 'force-dynamic'
+
 export default async function CriticosPage() {
   const sub = 'primeodontocenter'
   const from = (() => {
     const d = new Date()
-    d.setMonth(d.getMonth() - 3)
+    d.setDate(d.getDate() - 30)
     return d.toISOString().split('T')[0]
   })()
   const to = new Date().toISOString().split('T')[0]

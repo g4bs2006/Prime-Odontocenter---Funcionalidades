@@ -9,6 +9,8 @@ import { KpiCard } from '@/components/kpi-card'
 import { DataTable, type Column } from '@/components/data-table'
 import { Badge } from '@/components/ui/badge'
 
+export const dynamic = 'force-dynamic'
+
 export default async function FinanceiroPage() {
   const from = (() => {
     const d = new Date()

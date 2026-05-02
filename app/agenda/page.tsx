@@ -1,31 +1,35 @@
 import { fetchClinicorp } from '@/lib/api'
-import type { ClinicorpProfessional, ClinicorpAvailableTime } from '@/lib/types'
+import type { ClinicorpProfessional } from '@/lib/types'
+import { PROFESSIONALS } from '@/lib/duty-schedule'
 import { AgendaClient } from './agenda-client'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AgendaPage() {
-  const professionals = await fetchClinicorp<ClinicorpProfessional[]>(
+  const all = await fetchClinicorp<ClinicorpProfessional[]>(
     '/professional/list_all_professionals?subscriber_id=primeodontocenter'
   )
 
-  const from = new Date().toISOString().split('T')[0]
-  const toDate = new Date()
-  toDate.setDate(toDate.getDate() + 7)
-  const to = toDate.toISOString().split('T')[0]
+  // Encontra os IDs reais do Clinicorp pelo nome dos profissionais
+  function findId(fullName: string): number | null {
+    const keyword = (fullName.toLowerCase().split(' ')[1] ?? fullName).toLowerCase()
+    const match = all.find((p) => p.Name?.toLowerCase().includes(keyword))
+    return match?.id ?? null
+  }
 
-  const availability = await fetchClinicorp<ClinicorpAvailableTime[]>(
-    `/business/list_available_times?subscriber_id=primeodontocenter&business_id=6505624431493120&from=${from}&to=${to}`
-  )
+  const rafaelId = findId(PROFESSIONALS.rafael.name)
+  const alexId   = findId(PROFESSIONALS.alex.name)
 
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">📅 Agenda Disponível</h1>
-        <p className="text-muted-foreground text-sm mt-1">Próximos 7 dias · horários livres por profissional</p>
+        <h1 className="text-2xl font-bold">📅 Agenda</h1>
+        <p className="text-muted-foreground text-sm mt-1">Semana atual · Dr. Rafael e Dr. Alex</p>
       </div>
       <AgendaClient
-        professionals={professionals}
-        availability={availability}
         schedulingLink={process.env.SCHEDULING_LINK ?? ''}
+        rafaelId={rafaelId}
+        alexId={alexId}
       />
     </div>
   )

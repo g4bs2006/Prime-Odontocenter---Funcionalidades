@@ -9,6 +9,8 @@ import { formatBRL, formatDate } from '@/lib/transformers'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/empty-state'
 
+export const dynamic = 'force-dynamic'
+
 interface PageProps {
   searchParams: { phone?: string; patientId?: string }
 }

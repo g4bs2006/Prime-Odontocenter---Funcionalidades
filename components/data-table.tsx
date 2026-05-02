@@ -40,7 +40,7 @@ export function DataTable<T>({
               <TableRow key={i}>
                 {columns.map((col) => (
                   <TableCell key={String(col.key)}>
-                    {col.render ? col.render(row) : String((row as any)[col.key] ?? '—')}
+                    {col.render ? col.render(row) : String((row as Record<string, unknown>)[col.key as string] ?? '—')}
                   </TableCell>
                 ))}
               </TableRow>
